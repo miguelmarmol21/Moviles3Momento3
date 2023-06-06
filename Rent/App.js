@@ -14,10 +14,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Car'
-              screenOptions={{
-                headerShown:false,
-              }}>
+      <Stack.Navigator initialRouteName='Login'
+        screenOptions={{
+          headerShown:false,
+        }}>
         <Stack.Screen name='Login' component={LoginScreen} options={{title:'Renta de Carros', unmountOnBlur: true}}/>
         <Stack.Screen name='Register' component={RegisterScreen} options={{title:'Renta de Carros'}}/>
         <Stack.Screen name='Profile' component={ProfileScreen} options={{title:'Renta de Carros'}}/>

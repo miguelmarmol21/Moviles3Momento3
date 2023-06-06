@@ -38,10 +38,15 @@ export default function LoginScreen({navigation}) {
         const users = getValuesArrayUser();
         users.then((values) => {
             let findUser = values.find(value => value.userName == userName  && value.password == password)
-            if(findUser != undefined){
+            if(findUser != undefined && findUser.role === '1'){
                 setErrorMess('Iniciando Sesion')
                 setTimeout(()=>{
                 navigation.navigate('Profile')
+                },3000)
+            }else if(findUser != undefined && findUser.role === '0'){
+                setErrorMess('Iniciando como Administrador')
+                setTimeout(()=>{
+                navigation.navigate('Car')
                 },3000)
             }else{
                 setErrorMess('Usuario y/o Contraseña INVALIDA')

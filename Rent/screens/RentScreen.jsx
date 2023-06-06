@@ -111,6 +111,16 @@ export default function RentScreen({ navigation }) {
           buttonColor="#0265FE"
           onPress={getCustomers}
         >Buscar</Button>
+        <Button
+          style={{marginTop:20}}
+          textColor="#0265FE"
+          onPress={()=>{
+          setTimeout(()=>{
+            navigation.navigate('Profile')
+          },1000)
+          setValue('')
+          }}
+        >Volver</Button>
       </View>
       <Text style={{fontFamily:'Arial',fontSize:15,marginTop:20,color:'red'}}>{errorMess}</Text>
     </View>

@@ -17,13 +17,12 @@ const userSchema = mongoose.Schema({
         type: String,
         require:true  
     },
-    confPassword:{
+    role:{
         type: String,
         require:true  
     },
-    removeEventListener:{
-        type: String,
-        require:true  
+    reservword:{
+        type: String, 
     }
 });
 

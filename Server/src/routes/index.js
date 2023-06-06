@@ -25,22 +25,22 @@ router.get('/',(req, res)=>{
 // Recuperar todos los users
 router.get('/users',cors(),(req, res)=>{
     userSchema
-         .find()
-         .then((data) => res.json(data))
-         .catch((error) =>res.json({message: error}))
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) =>res.json({message: error}))
  })
 
  // Recuperar user por id
 router.get('/users/:id',cors(),(req, res)=>{
     const { id } = req.params;
     userSchema
-         .findById(id)
-         .then((data) => res.json(data))
-         .catch((error) =>res.json({message: error}))
+        .findById(id)
+        .then((data) => res.json(data))
+        .catch((error) =>res.json({message: error}))
  })
 
 // Agregar carro
- router.post('/car',cors(),(req, res)=>{
+ router.post('/cars',cors(),(req, res)=>{
     const car = carSchema(req.body);
     car
         .save()
@@ -48,8 +48,16 @@ router.get('/users/:id',cors(),(req, res)=>{
         .catch((error) =>res.json({message: error}))
 })
 
+// Buscar los carros
+router.get('/cars',cors(),(req, res)=>{
+    carSchema
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) =>res.json({message: error}))
+ })
+
 // Agregar renta
-router.post('/rent',cors(),(req, res)=>{
+router.post('/rents',cors(),(req, res)=>{
     const rent = rentSchema(req.body);
     rent
         .save()
@@ -58,11 +66,11 @@ router.post('/rent',cors(),(req, res)=>{
 })
 
 // Buscar las rentas
-router.get('/rent',cors(),(req, res)=>{
+router.get('/rents',cors(),(req, res)=>{
     rentSchema
-         .find()
-         .then((data) => res.json(data))
-         .catch((error) =>res.json({message: error}))
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) =>res.json({message: error}))
  })
 
 module.exports = router;

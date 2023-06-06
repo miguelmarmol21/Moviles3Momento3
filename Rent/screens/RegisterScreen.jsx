@@ -9,7 +9,7 @@ import { size } from "lodash";
 
 export default function RegisterScreen({navigation}) {
 
-    const [errorMessage, setErrorMessage] = useState(false)
+    const [errorMessage, setErrorMessage] = useState()
     const [showPass,setShowPass] = useState(false);
     const [showPassConf,setShowPassConf] = useState(false);
     const [role, setRole] = useState('')
@@ -44,6 +44,7 @@ export default function RegisterScreen({navigation}) {
 
   const onSave =  (data) =>{
     const { names, email, userName, password, confPassword} = data;
+    const rol = role
     const users = getValuesArrayUser()
     users.then(async (values)=>{
       let findArrayUser = values.find(value => userName == value.userName)
@@ -63,8 +64,8 @@ export default function RegisterScreen({navigation}) {
           names, 
           email, 
           userName, 
-          password, 
-          confPassword
+          password,
+          role
         })
         if(response){
           setErrorMessage('Registrado Exitosamente')  
@@ -77,7 +78,7 @@ export default function RegisterScreen({navigation}) {
         }
       }
     })
-    }
+  }
 
 
     return (
@@ -196,6 +197,7 @@ export default function RegisterScreen({navigation}) {
               onValueChange={role => setRole(role)}
               value={role}
             >
+              <Picker.Item label="" />
               <Picker.Item label="Administrador" value="0" />
               <Picker.Item label="Usuario" value="1"/>
             </Picker>
