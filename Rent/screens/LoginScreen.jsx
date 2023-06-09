@@ -1,6 +1,7 @@
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useForm, Controller } from 'react-hook-form';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { styles } from "../assets/styles/styles";
 import axios from 'axios';
@@ -37,14 +38,17 @@ export default function LoginScreen({navigation}) {
         const {userName, password} = data;
         const users = getValuesArrayUser();
         users.then((values) => {
+            AsyncStorage.clear()
             let findUser = values.find(value => value.userName == userName  && value.password == password)
             if(findUser != undefined && findUser.role === '1'){
                 setErrorMess('Iniciando Sesion')
+                AsyncStorage.setItem('keyProfile', JSON.stringify(findUser))
                 setTimeout(()=>{
-                navigation.navigate('Profile')
+                navigation.navigate('HomeTabs')
                 },3000)
             }else if(findUser != undefined && findUser.role === '0'){
                 setErrorMess('Iniciando como Administrador')
+                AsyncStorage.setItem('keyProfile', JSON.stringify(findUser))
                 setTimeout(()=>{
                 navigation.navigate('Car')
                 },3000)
@@ -58,8 +62,12 @@ export default function LoginScreen({navigation}) {
     
     return (
         <View style={[styles.container]}>
-            <Text style={{fontFamily:'Arial',fontSize:40}}>Inicia sesión</Text>
-            <Text style={{fontFamily:'Arial',fontSize:15,marginTop:10}}>Utiliza tu cuenta de RentCar</Text>
+            <View style = {[styles.view,{flex:2}]}>
+                <LoginBanner name="car"></LoginBanner>
+            </View>
+            <View style = {[styles.view,{flex:4}]}>
+                <Text style={{fontFamily:'Arial',fontSize:30}}>Inicia Sesion</Text>
+                <Text style={{fontFamily:'Arial',fontSize:15,marginTop:10}}>Utiliza tu cuenta de RentCar</Text>
             <Controller
                 control={control}
                     rules={{
@@ -67,7 +75,7 @@ export default function LoginScreen({navigation}) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                    style={styles.texinput}
+                    style={[styles.texinputOthers]}
                     activeOutlineColor="#0265FE"
                     outlineColor="#919191"
                     label="Usuario"
@@ -88,7 +96,7 @@ export default function LoginScreen({navigation}) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                    style={styles.texinput}
+                    style={[styles.texinputOthers]}
                     activeOutlineColor="#0265FE"
                     outlineColor="#919191"
                     label="Contraseña"
@@ -118,6 +126,7 @@ export default function LoginScreen({navigation}) {
                 style={{marginTop:10}}
                 icon="login"
                 mode="contained"
+                
                 buttonColor="#0265FE"
                 onPress={handleSubmit(onSignIn)}
             >Iniciar Sesión</Button>
@@ -126,14 +135,19 @@ export default function LoginScreen({navigation}) {
                 style={{marginTop:10}}
                 textColor="#0265FE"
                 onPress={()=>{
-                    navigation.navigate('NewPassword')
+                    navigation.navigate('NewPasswordUserScreen')
+                    // AsyncStorage.clear()
                 }}
             >¿Olvidaste la contraseña?</Button>
             <Text style={{fontFamily:'Arial',fontSize:15,marginTop:20,color:'red'}}>{errorMess}</Text>
+           </View>
         </View>
     );
 }
 
-const defaultFormValues = () =>{
-    return { userName: "", password:"" }
-}
+function LoginBanner(props) {
+    return (
+      <Image style={{ width: '100%', height: '100%', resizeMode: 'stretch' }} source={require(`../assets/${props.name}.png`)}>
+      </Image>
+    );
+  }

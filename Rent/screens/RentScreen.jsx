@@ -6,8 +6,9 @@ import { styles } from "../assets/styles/styles";
 import axios from 'axios';
 
 export default function RentScreen({ navigation }) {
-  const [errorMess, setErrorMess] = useState("");
+  const [errorMessage, setErrorMessage] = useState('')
   const [cars, setCars] = useState([]);
+  const [plateRent, setPlateRent] = useState('');
 
   const URL = 'http://127.0.0.1:3600'
 
@@ -19,13 +20,66 @@ export default function RentScreen({ navigation }) {
     }
   });
 
-  // useEffect(()=>{
-  //   getCustomers()
-  // },)
+  useEffect(()=>{
+    getCarArray()
+  },[])
 
-  const   getCustomers = async () =>{
-    const response = await axios.get(`${URL}/rent`);
+  //Funcion que obtiene los datos
+  const getValuesArrayRent = async () =>{
+    let values = await axios.get(`${URL}/rents`);
+    return new Promise((resolve, reject) =>{
+      if(values.length === 0){
+          reject(new Error('No existen datos'))
+        }
+        else{
+          setTimeout(()=>{ 
+            resolve(values.data);
+          },1500)
+        }
+    });
+  }
+
+  const   getCarArray = async () =>{
+    const response = await axios.get(`${URL}/cars`);
     setCars(response.data)
+  }
+
+  const onSaveRent = (data)=>{
+    const { initialDate, finalDate, rentNumber } = data;
+    const rent = getValuesArrayRent()
+    rent.then(async (values)=>{
+      let findRent = values.find(value => value.rentNumber == rentNumber);
+        if(findRent != undefined){
+          setErrorMessage('Numero renta relacionado a otro registro');
+        }else if(plateRent == undefined){
+          setErrorMessage('Seleccione una placa')
+        }else{
+          const response = await axios.post(`${URL}/rents`,{
+            plateRent,
+            rentNumber,
+            initialDate,
+            finalDate,
+            statusRent:true
+          })
+          if(response){
+            onUpdateCarStatus()
+          }else{
+            setErrorMessage('Ocurrio un error intenta de nuevo ...') 
+          }
+        }
+    })
+  }
+
+  const onUpdateCarStatus = async () =>{
+    let findCar = cars.find(car => car.plateNumber == plateRent);
+    const response = await axios.put(`${URL}/cars/${findCar._id}`,{
+      statusCar:false
+    })
+    if(response){
+      setErrorMessage('Renta guardada exitosamente ...') 
+    }else{
+      setErrorMessage('Ocurrio un error intenta de nuevo ...')
+    }
   }
 
   return (
@@ -33,10 +87,12 @@ export default function RentScreen({ navigation }) {
       <Text style={{fontFamily:'Arial',fontSize:30,marginTop:10}}>Renta de Carros</Text>
       <Picker
         style={styles.picker}
+        onValueChange={plateRent => setPlateRent(plateRent)}
+        value={plateRent}
       >
-        <Picker.Item label=""/>
+        <Picker.Item label="" value=""/>
         { 
-          cars.map(car => <Picker.Item key={car.plateRent} label={car.plateRent} value={car.plateRent}/>)
+          cars.map(car => <Picker.Item key={car.plateNumber} label={car.plateNumber} value={car.plateNumber}/>)
         }
       </Picker>
       <Controller
@@ -49,9 +105,30 @@ export default function RentScreen({ navigation }) {
           style={styles.texinput}
           activeOutlineColor="#0265FE"
           outlineColor="#919191"
+          label="Nro Renta "
+          mode="outlined"
+          left={<TextInput.Icon icon="account-arrow-down"/>}
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+        />
+        )}
+        name="rentNumber"
+        />
+        {errors.rentNumber && <Text style={{ color: 'red' }}>El Campo obligatorio</Text>}
+      <Controller
+        control={control}
+        rules={{
+        required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+        <TextInput
+          style={styles.texinput}
+          activeOutlineColor="#0265FE"
+          outlineColor="#919191"
           label="Fecha Inicial "
           mode="outlined"
-          left={<TextInput.Icon icon="date"/>}
+          left={<TextInput.Icon icon="calendar-range"/>}
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
@@ -72,7 +149,7 @@ export default function RentScreen({ navigation }) {
           outlineColor="#919191"
           label="Fecha Final"
           mode="outlined"
-          left={<TextInput.Icon icon="day"/>}
+          left={<TextInput.Icon icon="calendar-range"/>}
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
@@ -80,37 +157,15 @@ export default function RentScreen({ navigation }) {
         )}
         name="finalDate"
         />
-        {errors.finalDate && <Text style={{ color: 'red' }}>El Campo obligatorio</Text>}
-      <Controller
-        control={control}
-        rules={{
-        required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          style={styles.texinput}
-          activeOutlineColor="#0265FE"
-          outlineColor="#919191"
-          label="Nro Renta "
-          mode="outlined"
-          left={<TextInput.Icon icon="day"/>}
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-        />
-        )}
-        name="rentNumber"
-        />
-        {errors.rentNumber && <Text style={{ color: 'red' }}>El Campo obligatorio</Text>}
-      
+        {errors.finalDate && <Text style={{ color: 'red' }}>El Campo obligatorio</Text>}     
       <View style={[{flexDirection: "row", marginTop:20 }]}>
         <Button
           style={{ marginTop: 15, marginEnd: 10 }}
           icon="share"
           mode="contained"
           buttonColor="#0265FE"
-          onPress={getCustomers}
-        >Buscar</Button>
+          onPress={handleSubmit(onSaveRent)}
+        >Guardar</Button>
         <Button
           style={{marginTop:20}}
           textColor="#0265FE"
@@ -122,7 +177,7 @@ export default function RentScreen({ navigation }) {
           }}
         >Volver</Button>
       </View>
-      <Text style={{fontFamily:'Arial',fontSize:15,marginTop:20,color:'red'}}>{errorMess}</Text>
+      <Text style={{fontFamily:'Arial',fontSize:15,marginTop:20,color:'red'}}>{errorMessage}</Text>
     </View>
   );
 }

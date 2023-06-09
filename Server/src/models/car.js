@@ -9,7 +9,7 @@ const carSchema = mongoose.Schema({
         type: String,
         require:true     
     },
-    status:{
+    statusCar:{
         type: Boolean,
         require:true     
     },

@@ -7,7 +7,7 @@ import { styles } from "../assets/styles/styles";
 
 export default function CarScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState('')
-  const [status, setStatus] = useState('')
+  const [statusCar, setStatusCar] = useState('')
 
   const URL = 'http://127.0.0.1:3600'
 
@@ -45,7 +45,7 @@ export default function CarScreen({ navigation }) {
         const response = await axios.post(`${URL}/cars`,{
           plateNumber, 
           brand, 
-          status, 
+          statusCar, 
           dailyvalue
         })
         if(response){
@@ -106,8 +106,8 @@ export default function CarScreen({ navigation }) {
     {errors.brand && <Text style={{ color: 'red' }}>El Campo obligatorio</Text>}
     <Picker
       style={styles.picker}
-      onValueChange={status => setStatus(status)}
-      value={status}
+      onValueChange={statusCar => setStatusCar(statusCar)}
+      value={statusCar}
     >
       <Picker.Item label="" />
       <Picker.Item label="Disponible" value="true" />

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     texinput:{
       marginTop:10,
@@ -18,6 +18,19 @@ const styles = StyleSheet.create({
       height: "7%",
       backgroundColor:'#fff',
       borderRadius: "5px",
+    },
+    img: {
+      position:'absolute'
+    },
+    view: {
+      width:"80%",
+      height:"90%",
+      alignItems: 'center',
+    },
+    texinputOthers:{
+      marginTop:15,
+      width: "100%",
+      backgroundColor:'#fff',
     }
   });
 

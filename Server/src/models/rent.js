@@ -17,6 +17,13 @@ const rentSchema = mongoose.Schema({
         type: String,
         require:true  
     },
+    statusRent:{
+        type: Boolean,
+        require:true  
+    },
+    returnDate:{
+        type: String,
+    }
     
 });
 
