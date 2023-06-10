@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 export default function HomeTabs({navigation}) {
     return(
-    <Tab.Navigator initialRouteName='Rent'
+    <Tab.Navigator initialRouteName='Profile'
         screenOptions={{
             headerShown:false,
             tabBarActiveTintColor:'#000000',

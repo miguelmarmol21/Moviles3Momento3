@@ -37,7 +37,7 @@ export default function ProfileScreen({navigation}){
             <Text style={{marginTop:10}}>
                 Nro Placa: {item.plateNumber}{"\n"}
                 Marca: {item.brand}{"\n"}
-                Estado: {item.status ? 'Disponible':'No Disponible'}{"\n"}
+                Estado: {item.statusCar ? 'Disponible':'No Disponible'}{"\n"}
                 Valor Diario: {item.dailyvalue}{"\n"}
             </Text>}
         />

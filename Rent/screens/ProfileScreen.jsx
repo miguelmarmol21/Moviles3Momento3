@@ -45,6 +45,18 @@ export default function ProfileScreen({navigation}){
             <Text style={{fontFamily:'Arial',fontSize:25,marginTop:10}}>{messageProfile}</Text>
             {contain && (
                 <Text style={{fontFamily:'Arial',fontSize:20,marginTop:10}}>Que deseas hacer</Text>
+                
+            )}
+            {contain && (
+                <Text style={{fontFamily:'Arial',fontSize:20,marginTop:10}}>Ver nuestros carros disponibles</Text>
+            )}
+            {contain && (
+                <Button
+                    textColor="#0265FE"
+                    onPress={()=>{
+                        navigation.navigate('ListCar')
+                    }}
+                >Ver Carros Disponibles</Button>
             )}
         </View>
     </View>

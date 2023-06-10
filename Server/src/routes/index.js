@@ -60,11 +60,17 @@ router.get('/users/:id',cors(),(req, res)=>{
 // Buscar los carros
 router.get('/cars',cors(),(req, res)=>{
     carSchema
-        .find()
+        .find({statusCar:true})
         .then((data) => res.json(data))
         .catch((error) =>res.json({message: error}))
  })
 
+ router.get('/cars/return',cors(),(req, res)=>{
+    carSchema
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) =>res.json({message: error}))
+ })
    // Actualizar estado carro por id
    router.put('/cars/:id',cors(),(req, res)=>{
     const { id } = req.params;
@@ -87,7 +93,7 @@ router.post('/rents',cors(),(req, res)=>{
 // Buscar las rentas
 router.get('/rents',cors(),(req, res)=>{
     rentSchema
-        .find()
+        .find({statusRent:true})
         .then((data) => res.json(data))
         .catch((error) =>res.json({message: error}))
  })

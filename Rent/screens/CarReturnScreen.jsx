@@ -31,7 +31,7 @@ export default function ProfileScreen({navigation}){
     }
 
     const getCars = async () =>{
-      const response = await axios.get(`${URL}/cars`);
+      const response = await axios.get(`${URL}/cars/return`);
       setCars(response.data)
     }
 
@@ -126,7 +126,7 @@ export default function ProfileScreen({navigation}){
           mode="contained"
           buttonColor="#0265FE"
           onPress={handleSubmit(onSaveCarReturn)}
-        >Buscar</Button>
+        >Devolver</Button>
         <Button
             style={{marginTop:10}}
             textColor="#0265FE"
